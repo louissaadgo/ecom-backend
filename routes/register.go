@@ -1,8 +1,6 @@
 package routes
 
 import (
-	"crypto/sha256"
-	"encoding/hex"
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
@@ -27,8 +25,7 @@ func register(c *fiber.Ctx) error {
 		return fiber.NewError(400, "Invalid password")
 	}
 
-	hashedPassword := sha256.Sum256([]byte(user.Password))
-	user.Password = hex.EncodeToString(hashedPassword[:])
+	user.SetPassword(user.Password)
 
 	_, err := database.DB.Query(`INSERT INTO users(firstName, lastName, email, password) VALUES($1,$2,$3,$4);`, user.FirstName, user.LastName, user.Email, user.Password)
 	if err != nil {
