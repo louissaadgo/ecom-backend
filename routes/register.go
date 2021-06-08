@@ -27,7 +27,7 @@ func register(c *fiber.Ctx) error {
 
 	user.SetPassword(user.Password)
 
-	_, err := database.DB.Query(`INSERT INTO users(firstName, lastName, email, password) VALUES($1,$2,$3,$4);`, user.FirstName, user.LastName, user.Email, user.Password)
+	_, err := database.DB.Query(`INSERT INTO users(firstName, lastName, email, password,role_id) VALUES($1,$2,$3,$4,$5);`, user.FirstName, user.LastName, user.Email, user.Password, 1)
 	if err != nil {
 		errString := fmt.Sprintln(err)
 		return fiber.NewError(400, errString)

@@ -11,6 +11,7 @@ type User struct {
 	LastName  string
 	Email     string
 	Password  string
+	RoleID    uint
 }
 
 func (user *User) SetPassword(password string) {

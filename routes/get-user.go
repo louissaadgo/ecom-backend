@@ -15,8 +15,8 @@ func getUser(c *fiber.Ctx) error {
 		return fiber.NewError(400, "Something went wrong")
 	}
 	var user models.User
-	q := database.DB.QueryRow(`SELECT id, firstName, lastName, email FROM users WHERE id = $1`, id)
-	err = q.Scan(&user.Id, &user.FirstName, &user.LastName, &user.Email)
+	q := database.DB.QueryRow(`SELECT id, firstName, lastName, email, role_id FROM users WHERE id = $1`, id)
+	err = q.Scan(&user.Id, &user.FirstName, &user.LastName, &user.Email, &user.RoleID)
 	if err == sql.ErrNoRows {
 		return fiber.NewError(400, "Something went wrong")
 	}

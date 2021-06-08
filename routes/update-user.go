@@ -21,7 +21,7 @@ func updateUser(c *fiber.Ctx) error {
 		return fiber.NewError(400, "something went wrong")
 	}
 
-	database.DB.Exec(`UPDATE users SET firstName = $1, lastName = $2, email = $3 WHERE id = $4;`, user.FirstName, user.LastName, user.Email, user.Id)
+	database.DB.Exec(`UPDATE users SET firstName = $1, lastName = $2, email = $3, role_id = $4 WHERE id = $5;`, user.FirstName, user.LastName, user.Email, user.RoleID, user.Id)
 
 	return c.JSON(user)
 }
