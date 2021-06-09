@@ -2,9 +2,11 @@ package routes
 
 import (
 	"database/sql"
+	"fmt"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/lib/pq"
 	"github.com/louissaadgo/ecom-backend/database"
 	"github.com/louissaadgo/ecom-backend/models"
 )
@@ -36,8 +38,9 @@ func createRole(c *fiber.Ctx) error {
 	if err := c.BodyParser(&role); err != nil {
 		return fiber.NewError(400, "Failed to create a user")
 	}
-	_, err := database.DB.Exec(`INSERT INTO roles(name) VALUES($1)`, role.Name)
+	_, err := database.DB.Exec(`INSERT INTO roles(name,permissions) VALUES($1,$2)`, role.Name, pq.Array(role.Permissions))
 	if err != nil {
+		fmt.Println(err)
 		return fiber.NewError(400, "Something went wrong")
 	}
 	return c.SendString("Success")
@@ -69,7 +72,7 @@ func updateRole(c *fiber.Ctx) error {
 	}
 	role.ID = uint(id)
 
-	database.DB.Exec(`UPDATE roles SET name = $1 WHERE id = $2;`, role.Name, role.ID)
+	database.DB.Exec(`UPDATE roles SET name = $1, permissions = $2 WHERE id = $3;`, role.Name, pq.Array(role.Permissions), role.ID)
 
 	return c.JSON(role)
 }
